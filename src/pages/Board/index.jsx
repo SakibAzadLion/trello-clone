@@ -101,6 +101,11 @@ const Board = () => {
   const handleDrop = (dropListId) => {
     // console.log(e); // here target is the element above which the drag element is droped.
     const newList = lists.map((list) => {
+      // Return if dropped at the same list
+      if (dragStartList === dropListId) {
+        return list; 
+      }
+
       // Make a copy cards property
       const tempCards = [...list.cards];
 
