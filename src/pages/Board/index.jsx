@@ -81,7 +81,7 @@ const Board = () => {
   };
   const handleDragEnd = (e) => {
     // console.log(e); // here target is the element which we are dragging.
-    setDragCard(null)
+    setDragCard(null);
     setDragStartList(null);
     console.log('Drag end...');
   };
@@ -98,12 +98,13 @@ const Board = () => {
     console.log(e); // here target is the element from which we leave while dragging
     console.log('Drag leave...');
   };
-  const handleDrop = (dropListId) => {
+  const handleDrop = (dropListId, dropCardIndex) => {
     // console.log(e); // here target is the element above which the drag element is droped.
+
     const newList = lists.map((list) => {
       // Return if dropped at the same list
       if (dragStartList === dropListId) {
-        return list; 
+        return list;
       }
 
       // Make a copy cards property
@@ -117,23 +118,32 @@ const Board = () => {
       }
 
       if (list.id === dropListId) {
-        return { ...list, cards: [...tempCards, dragCard] };
+        console.log('drop index id', dropCardIndex);
+        if (dropCardIndex === null) {
+          return { ...list, cards: [...tempCards, dragCard] };
+        }
+
+        return {
+          ...list,
+          cards: [
+            ...tempCards.slice(0, dropCardIndex),
+            dragCard,
+            ...tempCards.slice(dropCardIndex),
+          ],
+        };
       }
 
       return list;
     });
 
-    console.log(newList);
+    // console.log(newList);
     setLists(newList);
   };
 
   const listsMarkup = lists.map((list) => {
-    const populatedCards = cards.filter((card) => {
-      if (list.cards.includes(card.id)) {
-        return true;
-      }
-
-      return false;
+    const populatedCards = list.cards.map((cardId) => {
+      const newCard = cards.find((card) => card.id === cardId);
+      return { ...newCard };
     });
 
     return (

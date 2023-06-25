@@ -1,4 +1,4 @@
-const Card = ({ listId, card, onDragStart }) => {
+const Card = ({ index, listId, card, onDragStart, onDragOver }) => {
   const handleDragStart = () => {
     console.log('Drag started...');
     onDragStart(card.id, listId);
@@ -6,9 +6,12 @@ const Card = ({ listId, card, onDragStart }) => {
 
   return (
     <a
+      id='card'
       className='flex flex-col mb-1.5 rounded-md bg-white shadow-sm'
+      data-index={index}
       draggable='true'
       onDragStart={handleDragStart}
+      onDragOver={onDragOver}
     >
       {/* <div className=''>
         <div className='h-15 w-full'>
