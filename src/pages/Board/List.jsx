@@ -8,10 +8,7 @@ const List = ({
   title,
   cards,
   onDragStart,
-  onDragEnd,
-  onDragOver,
-  onDragLeave,
-  onDrop,
+  updateStateOnDrop,
 }) => {
   const handleDragDrop = (e) => {
     let elem = e.target.closest('#card');
@@ -19,8 +16,6 @@ const List = ({
     if (!elem) {
       elem = e.target.closest('#list');
     }
-
-    console.log(elem, elem.offsetTop, e.clientY, elem.dataset.index);
 
     const elemOffsetMid = elem.offsetTop + Math.abs(elem.offsetHeight / 2);
     let dropCardIndex = Number;
@@ -34,9 +29,8 @@ const List = ({
     }
 
     console.log('Drag drop...');
-    onDrop(listId, dropCardIndex);
+    updateStateOnDrop(listId, dropCardIndex);
   };
-
   return (
     <div
       id='list'
@@ -45,19 +39,11 @@ const List = ({
         backgroundColor: light.listBackground,
         color: light.listText,
       }}
-      onDragEnd={onDragEnd}
-      onDragOver={onDragOver}
-      onDragLeave={onDragLeave}
       onDrop={handleDragDrop}
     >
       <ListHeader title={title} />
 
-      <ListBody
-        listId={listId}
-        cards={cards}
-        onDragStart={onDragStart}
-        // onDragOver={onDragOver}
-      />
+      <ListBody listId={listId} cards={cards} onDragStart={onDragStart} />
 
       <ListFooter />
     </div>

@@ -1,6 +1,6 @@
 import Card from './Card';
 
-const ListBody = ({ listId, cards, onDragStart, onDragOver }) => {
+const ListBody = ({ listId, cards, onDragStart }) => {
   const cardsMarkup = cards.map((card, idx) => {
     return (
       <Card
@@ -9,7 +9,6 @@ const ListBody = ({ listId, cards, onDragStart, onDragOver }) => {
         listId={listId}
         card={card}
         onDragStart={onDragStart}
-        onDragOver={onDragOver}
       />
     );
   });

@@ -1,7 +1,17 @@
-const Card = ({ index, listId, card, onDragStart, onDragOver }) => {
-  const handleDragStart = () => {
+const Card = ({ index, listId, card, onDragStart}) => {
+  const handleDragStart = (e) => {
     console.log('Drag started...');
-    onDragStart(card.id, listId);
+
+    e.target.style.opacity = '0';
+    // document.querySelector('html').style.cursor = 'move';
+    // document.querySelector('html').style.cursor = 'grab';
+
+    const dragCardPosition = {
+      top: e.clientY - e.target.offsetTop,
+      left: e.clientX - e.target.offsetLeft,
+    };
+
+    onDragStart(card.id, listId, dragCardPosition);
   };
 
   return (
@@ -11,7 +21,6 @@ const Card = ({ index, listId, card, onDragStart, onDragOver }) => {
       data-index={index}
       draggable='true'
       onDragStart={handleDragStart}
-      onDragOver={onDragOver}
     >
       {/* <div className=''>
         <div className='h-15 w-full'>
