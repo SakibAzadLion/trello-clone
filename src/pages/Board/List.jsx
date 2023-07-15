@@ -4,33 +4,15 @@ import ListBody from './ListBody';
 
 const List = ({
   light,
-  listId,
+  listIdx,
   title,
   cards,
-  onDragStart,
-  updateStateOnDrop,
+  isDragging,
+  dragItem,
+  handleDragStart,
+  handleDragEnter,
+  handleDragEnd,
 }) => {
-  const handleDragDrop = (e) => {
-    let elem = e.target.closest('#card');
-
-    if (!elem) {
-      elem = e.target.closest('#list');
-    }
-
-    const elemOffsetMid = elem.offsetTop + Math.abs(elem.offsetHeight / 2);
-    let dropCardIndex = Number;
-
-    if (e.clientY <= elemOffsetMid) {
-      dropCardIndex = elem.dataset.index ? Number(elem.dataset.index) : 0;
-    } else {
-      dropCardIndex = elem.dataset.index
-        ? Number(elem.dataset.index) + 1
-        : cards.length;
-    }
-
-    console.log('Drag drop...');
-    updateStateOnDrop(listId, dropCardIndex);
-  };
   return (
     <div
       id='list'
@@ -39,11 +21,23 @@ const List = ({
         backgroundColor: light.listBackground,
         color: light.listText,
       }}
-      onDrop={handleDragDrop}
+      onDragEnter={
+        isDragging && !cards.length
+          ? (e) => handleDragEnter(e, { listIdx, cardIdx: 0 })
+          : null
+      }
     >
       <ListHeader title={title} />
 
-      <ListBody listId={listId} cards={cards} onDragStart={onDragStart} />
+      <ListBody
+        listIdx={listIdx}
+        cards={cards}
+        isDragging={isDragging}
+        dragItem={dragItem}
+        handleDragStart={handleDragStart}
+        handleDragEnter={handleDragEnter}
+        handleDragEnd={handleDragEnd}
+      />
 
       <ListFooter />
     </div>

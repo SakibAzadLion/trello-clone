@@ -1,17 +1,21 @@
-const CardFloat = ({ mousePosition, dragCardPosition, children }) => {
-  const top = '-' + dragCardPosition.top + 'px';
-  const left = '-' + dragCardPosition.left + 'px';
-
+const CardFloat = ({ mousePosition, floatCard }) => {
   return (
     <div
-      className={`fixed top-[${top}] left-[${left}] w-[236px] skew-y-2 pointer-events-none`}
+      className={`absolute w-[236px] z-50 pointer-events-none duration-100 transition-transform`}
       style={{
-        top: top,
-        left: left,
-        transform: `translate(${mousePosition.x}px, ${mousePosition.y}px) skewY(2deg)`,
+        top: `${mousePosition.y}px`,
+        left: `${mousePosition.x}px`,
+        transform: `translate(-50%, -50%) skewY(1deg)`,
       }}
     >
-      {children}
+      <a
+        className='flex flex-col mb-1.5 rounded-md bg-white shadow-sm cursor-grab'
+        draggable='true'
+      >
+        <div className='px-2.5 py-2'>
+          <p className='text-xs'>{floatCard.desc}</p>
+        </div>
+      </a>
     </div>
   );
 };

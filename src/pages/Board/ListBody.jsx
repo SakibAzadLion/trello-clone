@@ -1,14 +1,18 @@
 import Card from './Card';
 
-const ListBody = ({ listId, cards, onDragStart }) => {
+const ListBody = ({ listIdx, cards, isDragging, dragItem, handleDragStart, handleDragEnter, handleDragEnd }) => {
   const cardsMarkup = cards.map((card, idx) => {
     return (
       <Card
         key={card.id}
-        index={idx}
-        listId={listId}
+        cardIdx={idx}
+        listIdx={listIdx}
         card={card}
-        onDragStart={onDragStart}
+        isDragging={isDragging}
+        dragItem={dragItem}
+        handleDragStart={handleDragStart}
+        handleDragEnter={handleDragEnter}
+        handleDragEnd={handleDragEnd}
       />
     );
   });

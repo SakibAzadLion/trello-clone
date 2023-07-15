@@ -10,3 +10,18 @@
   }
 }
 
+@layer components {
+  .current {
+    @apply relative !important;
+    color: rgb(224, 226, 230) !important;
+  }
+
+  .current::before {
+    @apply content-[''] absolute top-0 left-0 w-full h-full z-30 rounded-md !important;
+    background-color: rgb(224, 226, 230) !important;
+  }
+
+  .drag-item {
+    @apply flex flex-col mb-1.5 rounded-md bg-white shadow-sm;
+  }
+}

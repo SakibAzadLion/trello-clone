@@ -1,26 +1,32 @@
-const Card = ({ index, listId, card, onDragStart}) => {
-  const handleDragStart = (e) => {
-    console.log('Drag started...');
+const Card = ({
+  index,
+  cardIdx,
+  listIdx,
+  card,
+  isDragging,
+  dragItem,
+  handleDragStart,
+  handleDragEnter,
+}) => {
+  const getStyle = () => {
+    if (
+      dragItem.current.listIdx === listIdx &&
+      dragItem.current.cardIdx === cardIdx
+    ) {
+      return 'current drag-item';
+    }
 
-    e.target.style.opacity = '0';
-    // document.querySelector('html').style.cursor = 'move';
-    // document.querySelector('html').style.cursor = 'grab';
-
-    const dragCardPosition = {
-      top: e.clientY - e.target.offsetTop,
-      left: e.clientX - e.target.offsetLeft,
-    };
-
-    onDragStart(card.id, listId, dragCardPosition);
+    return 'drag-item';
   };
 
   return (
     <a
       id='card'
-      className='flex flex-col mb-1.5 rounded-md bg-white shadow-sm'
-      data-index={index}
+      className={isDragging ? getStyle() : 'drag-item'}
       draggable='true'
-      onDragStart={handleDragStart}
+      data-index={index}
+      onDragStart={(e) => handleDragStart(e, { listIdx, cardIdx })}
+      onDragEnter={(e) => handleDragEnter(e, { listIdx, cardIdx })}
     >
       {/* <div className=''>
         <div className='h-15 w-full'>
