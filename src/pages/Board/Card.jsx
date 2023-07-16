@@ -53,6 +53,7 @@ const Card = ({
         <p className='text-xs'>{card.desc}</p>
       </div>
 
+
       {/* <div className='flex px-2.5 pb-2'>
         <div className='flex flex-row items-center px-1 py-1.5 bg-yellow-500 rounded'>
           <BsStopwatch

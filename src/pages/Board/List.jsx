@@ -12,6 +12,7 @@ const List = ({
   handleDragStart,
   handleDragEnter,
   handleDragEnd,
+  addNewCard,
 }) => {
   return (
     <div
@@ -39,7 +40,7 @@ const List = ({
         handleDragEnd={handleDragEnd}
       />
 
-      <ListFooter />
+      <ListFooter listIdx={listIdx} addNewCard={addNewCard} />
     </div>
   );
 };

@@ -24,4 +24,32 @@
   .drag-item {
     @apply flex flex-col mb-1.5 rounded-md bg-white shadow-sm;
   }
+
+  .animate-add-list-forward {
+    animation-name: addList;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    animation-direction: normal;
+  }
+
+  .animate-add-list-backward {
+    animation-name: addList;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in-out;
+    animation-direction: reverse;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes addList {
+    from {
+      opacity: 0;
+      height: 70px;
+    }
+
+    to {
+      opacity: 1;
+      height: 100px;
+    }
+  }
 }

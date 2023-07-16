@@ -123,7 +123,6 @@ const Board = () => {
 
   const handleDragOver = (e) => {
     console.log('Dragging Over...', e);
-    console.log(e.clientX, e.clientY);
     setMousePosition({
       x: e.clientX,
       y: e.clientY,
@@ -139,6 +138,38 @@ const Board = () => {
 
     dragItem.current = null;
     dragItemNode.current = null;
+  };
+
+  const addNewCard = (listIdx, desc) => {
+    const cardId = Number(Date.now().toString().slice(10));
+
+    const newCard = {
+      id: cardId,
+      desc,
+      labels: [],
+      cover: {
+        color: null,
+        image: null,
+      },
+    };
+
+    const newList = JSON.parse(JSON.stringify(lists));
+    newList[listIdx].cards.splice(newList.length, 0, cardId);
+    console.log(newList, newCard);
+
+    setCards([...cards, newCard]);
+    setLists(newList);
+  };
+
+  const addNewList = (title) => {
+    const newList = {
+      id: Number(Date.now().toString().slice(10)),
+      title,
+      cards: [],
+    };
+
+    const newLists = [...lists, newList];
+    setLists(newLists);
   };
 
   const getDragCard = () => {
@@ -170,6 +201,7 @@ const Board = () => {
         handleDragStart={handleDragStart}
         handleDragEnter={handleDragEnter}
         handleDragEnd={handleDragEnd}
+        addNewCard={addNewCard}
       />
     );
   });
@@ -188,14 +220,20 @@ const Board = () => {
       >
         <Navbar {...themes} />
 
-        <div id='boardMain'>
+        <div id='boardMain' className='h-[calc(100%-6.5rem)]'>
           <BoardTitle />
 
-          <div className='px-10 py-4'>
-            <div id='listBox' className='flex flex-row items-start [&>*]:mr-4'>
+          <div className='px-10 py-4 h-full'>
+            <div
+              id='listBox'
+              className='grid gap-x-4 items-start h-full overflow-auto'
+              style={{
+                gridTemplateColumns: `repeat(${lists.length + 1}, 256px)`,
+              }}
+            >
               {listsMarkup}
 
-              <ListAdd />
+              <ListAdd addNewList={addNewList} />
             </div>
           </div>
 
