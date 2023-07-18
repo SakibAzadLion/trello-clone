@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-// import { BsPlusLg, BsStopwatch, BsThreeDots, BsXLg } from 'react-icons/bs';
+import { Outlet } from 'react-router-dom';
 
 import Navbar from './Navbar';
 import BoardTitle from './BoardTitle';
@@ -207,44 +207,43 @@ const Board = () => {
   });
 
   return (
-    <>
-      <div
-        className='relative h-screen overflow-hidden'
-        style={{
-          backgroundImage:
-            'linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://fastly.picsum.photos/id/37/2000/1333.jpg?hmac=vpYLNsQZwU2szsZc4Uo17cW786vR0GEUVq4icaKopQI")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-        onDragOver={handleDragOver}
-      >
-        <Navbar {...themes} />
+    <div
+      className='relative h-screen overflow-hidden'
+      style={{
+        backgroundImage:
+          'linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://fastly.picsum.photos/id/37/2000/1333.jpg?hmac=vpYLNsQZwU2szsZc4Uo17cW786vR0GEUVq4icaKopQI")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+      onDragOver={handleDragOver}
+    >
+      <Navbar {...themes} />
 
-        <div id='boardMain' className='h-[calc(100%-6.5rem)]'>
-          <BoardTitle />
+      <div id='boardMain' className='h-[calc(100%-6.5rem)]'>
+        <BoardTitle />
 
-          <div className='px-10 py-4 h-full'>
-            <div
-              id='listBox'
-              className='grid gap-x-4 items-start h-full overflow-auto'
-              style={{
-                gridTemplateColumns: `repeat(${lists.length + 1}, 256px)`,
-              }}
-            >
-              {listsMarkup}
+        <div className='px-10 py-4 h-full'>
+          <div
+            id='listBox'
+            className='grid gap-x-4 items-start h-full overflow-auto'
+            style={{
+              gridTemplateColumns: `repeat(${lists.length + 1}, 256px)`,
+            }}
+          >
+            {listsMarkup}
 
-              <ListAdd addNewList={addNewList} />
-            </div>
+            <ListAdd addNewList={addNewList} />
           </div>
-
-          {/* <Modal {...themes} /> */}
         </div>
 
-        {isDragging && (
-          <CardFloat mousePosition={mousePosition} floatCard={getDragCard()} />
-        )}
+        {/* <Modal {...themes} /> */}
+        <Outlet />
       </div>
-    </>
+
+      {isDragging && (
+        <CardFloat mousePosition={mousePosition} floatCard={getDragCard()} />
+      )}
+    </div>
   );
 };
 

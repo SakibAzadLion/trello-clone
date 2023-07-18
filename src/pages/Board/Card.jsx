@@ -1,3 +1,5 @@
+import { Link, useLocation } from 'react-router-dom';
+
 const Card = ({
   index,
   cardIdx,
@@ -8,6 +10,8 @@ const Card = ({
   handleDragStart,
   handleDragEnter,
 }) => {
+  const location = useLocation();
+
   const getStyle = () => {
     if (
       dragItem.current.listIdx === listIdx &&
@@ -20,9 +24,11 @@ const Card = ({
   };
 
   return (
-    <a
+    <Link
+      to={`/modal/${cardIdx}`}
+      state={{ background: location }}
       id='card'
-      className={isDragging ? getStyle() : 'drag-item'}
+      className={isDragging ? getStyle() : 'drag-item hover:bg-gray-50'}
       draggable='true'
       data-index={index}
       onDragStart={(e) => handleDragStart(e, { listIdx, cardIdx })}
@@ -53,7 +59,6 @@ const Card = ({
         <p className='text-xs'>{card.desc}</p>
       </div>
 
-
       {/* <div className='flex px-2.5 pb-2'>
         <div className='flex flex-row items-center px-1 py-1.5 bg-yellow-500 rounded'>
           <BsStopwatch
@@ -63,7 +68,7 @@ const Card = ({
           <span className='text-[11px] text-gray-700 leading-none'>Jun 19</span>
         </div>
       </div> */}
-    </a>
+    </Link>
   );
 };
 
