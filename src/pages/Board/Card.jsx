@@ -25,7 +25,7 @@ const Card = ({
 
   return (
     <Link
-      to={`/modal/${cardIdx}`}
+      to={`/modal/${card.id}`}
       state={{ background: location }}
       id='card'
       className={isDragging ? getStyle() : 'drag-item hover:bg-gray-50'}

@@ -11,6 +11,10 @@
 }
 
 @layer components {
+  .active-cover {
+    @apply outline outline-2 outline-cyan-500 outline-offset-2;
+  }
+
   .current {
     @apply relative !important;
     color: rgb(224, 226, 230) !important;

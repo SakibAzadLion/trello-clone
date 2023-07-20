@@ -19,10 +19,7 @@ const Menu = ({ title, showMenu, children }) => {
           </div>
         </div>
 
-        <div className='flex flex-col py-1.5 px-3'>
-          <span className='text-xs mb-2'>{title}s</span>
-          {children}
-        </div>
+        {children}
       </div>
     </div>
   );
