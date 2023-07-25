@@ -3,6 +3,7 @@ import { BsCardImage, BsTag, BsTrash, BsXLg } from 'react-icons/bs';
 import { useNavigate, useParams } from 'react-router-dom';
 import LabelsMenu from '../menus/LabelsMenu';
 import CoverMenu from '../menus/CoverMenu';
+import CardTitle from '../titles/CardTitle';
 
 const cardsTemplate = [
   {
@@ -99,7 +100,7 @@ const Modal = () => {
   const [showLabelsMenu, setShowLabelsMenu] = useState(false);
   const [showCoverMenu, setShowCoverMenu] = useState(false);
 
-  console.log(cards);
+  console.log(showLabelsMenu);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -146,6 +147,16 @@ const Modal = () => {
     setCards(newCards);
   };
 
+  const handleDescChange = (text) => {
+    const newCards = cards.map((curCard) => {
+      if (curCard.id != id) return curCard;
+
+      return { ...curCard, desc: text };
+    });
+
+    setCards(newCards);
+  };
+
   return (
     <div className='fixed top-0 left-0 w-full h-screen bg-black/40 transition duration-150'>
       <div className='relative w-3/6 mx-auto bg-gray-100 rounded-md mt-20'>
@@ -185,11 +196,11 @@ const Modal = () => {
         </div>
 
         <div className='grid grid-cols-3 px-5 py-8'>
-          <div className='col-span-2'>
-            <div className='mb-8'>
-              <h1 className='text-lg font-semibold'>Board title</h1>
-            </div>
+          <div className='col-span-3 mb-8 break-words pr-11'>
+            <CardTitle desc={card.desc} onDescChange={handleDescChange} />
+          </div>
 
+          <div className='col-span-2'>
             <div className='flex flex-col'>
               <div className='flex flex-col mb-5'>
                 <span className='text-xs mb-2'>Labels</span>
@@ -218,7 +229,8 @@ const Modal = () => {
               </div> */}
             </div>
           </div>
-          <div className='flex flex-col mt-5'>
+
+          <div className='flex flex-col'>
             <span className='text-xs mb-2'>Add to card</span>
             <div className='flex flex-col'>
               <div className='relative'>

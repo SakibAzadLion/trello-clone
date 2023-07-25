@@ -28,7 +28,6 @@ const labels = [
 ];
 
 const LabelsMenu = ({ title, selectedLabels, showMenu, onLabelChange }) => {
-  // const [selectedLabels, setShowLabelsMenu] = useState([]);
 
   return (
     <Menu title={title} showMenu={showMenu}>
