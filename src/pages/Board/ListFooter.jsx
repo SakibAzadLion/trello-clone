@@ -1,12 +1,38 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { BsPlusLg, BsXLg } from 'react-icons/bs';
 
-const ListFooter = ({ listIdx, addNewCard }) => {
+import { ListContext } from '../../context/ListContext';
+import { CardMethodsContext } from '../../context/CardContext';
+
+const ListFooter = ({ listIdx }) => {
+  const { lists, setLists } = useContext(ListContext);
+  const { createCard } = useContext(CardMethodsContext);
+
   const [desc, setDesc] = useState('');
   const [toggleAddCard, setToggleAddCard] = useState(false);
 
   const handleOnClick = () => setToggleAddCard(!toggleAddCard);
   const updateDesc = (e) => setDesc(e.target.value);
+
+  const addNewCard = async (listIdx, desc) => {
+    const newCard = await createCard(desc);
+
+    const newList = JSON.parse(JSON.stringify(lists));
+    newList[listIdx].cards.splice(newList.length, 0, newCard.id);
+
+    setLists(newList);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+
+      addNewCard(listIdx, desc);
+
+      setDesc('');
+      setToggleAddCard(false);
+    }
+  };
 
   const handleAddCard = (e) => {
     e.preventDefault();
@@ -27,6 +53,7 @@ const ListFooter = ({ listIdx, addNewCard }) => {
               autoFocus
               value={desc}
               onChange={updateDesc}
+              onKeyDown={handleKeyDown}
             ></textarea>
 
             <div className='flex flex-row mt-2 items-center'>

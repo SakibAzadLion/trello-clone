@@ -1,10 +1,12 @@
-import { useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Outlet } from 'react-router-dom';
+
+import { ListContext, ListMethodsContext } from '../../context/ListContext';
+import { CardContext, CardMethodsContext } from '../../context/CardContext';
 
 import Navbar from './Navbar';
 import BoardTitle from './BoardTitle';
 import List from './List';
-// import Modal from './Modal';
 import ListAdd from './ListAdd';
 import CardFloat from './CardFloat';
 
@@ -21,67 +23,27 @@ const themes = {
   },
 };
 
-const listsTemplate = [
-  {
-    id: 0,
-    title: 'Do',
-    cards: [0, 1],
-  },
-  {
-    id: 1,
-    title: 'Did',
-    cards: [2],
-  },
-  {
-    id: 2,
-    title: 'Done',
-    cards: [],
-  },
-];
-
-const cardsTemplate = [
-  {
-    id: -1,
-    desc: '',
-  },
-  {
-    id: 0,
-    desc: 'card #0',
-    labels: ['#fff'],
-    cover: {
-      color: null,
-      image: null,
-    },
-  },
-  {
-    id: 1,
-    desc: 'card #1',
-    labels: ['#fff'],
-    cover: {
-      color: null,
-      image: null,
-    },
-  },
-  {
-    id: 2,
-    desc: 'card #2',
-    labels: ['#fff'],
-    cover: {
-      color: null,
-      image: null,
-    },
-  },
-];
-
 const Board = () => {
-  const [lists, setLists] = useState([...listsTemplate]);
-  const [cards, setCards] = useState([...cardsTemplate]);
+  const { lists, setLists } = useContext(ListContext);
+  const { cards } = useContext(CardContext);
+  const { getLists, updateListsCards } = useContext(ListMethodsContext);
+  const { getCards } = useContext(CardMethodsContext);
+
   const [isDragging, setIsDragging] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  // const [dragCardPosition, setDragCardPosition] = useState({ top: 0, left: 0 });
 
   const dragItem = useRef(null);
+  const dragItemPrev = useRef(null);
   const dragItemNode = useRef(null);
+
+  useEffect(() => {
+    getCards();
+    getLists();
+  }, []);
+
+  useEffect(() => {
+    updateListsCards();
+  }, [lists, updateListsCards]);
 
   const handleDragStart = (e, item) => {
     console.log('Drag Started', item);
@@ -90,6 +52,7 @@ const Board = () => {
     dragItemNode.current.addEventListener('dragend', handleDragEnd);
 
     dragItem.current = item;
+    dragItemPrev.current = item;
 
     dragItemNode.current.style.opacity = '0';
 
@@ -100,8 +63,6 @@ const Board = () => {
   };
 
   const handleDragEnter = (e, targetItem) => {
-    console.log('Drag Entered', targetItem);
-
     if (dragItemNode.current !== e.target) {
       const newList = JSON.parse(JSON.stringify(lists));
       const curDragItem = newList[dragItem.current.listIdx].cards.splice(
@@ -122,7 +83,6 @@ const Board = () => {
   };
 
   const handleDragOver = (e) => {
-    console.log('Dragging Over...', e);
     setMousePosition({
       x: e.clientX,
       y: e.clientY,
@@ -130,46 +90,14 @@ const Board = () => {
   };
 
   const handleDragEnd = () => {
-    console.log('Drag Ended');
     setIsDragging(false);
     setMousePosition({ x: 0, y: 0 });
 
     dragItemNode.current.removeEventListener('dragend', handleDragEnd);
 
     dragItem.current = null;
+    dragItemPrev.current = null;
     dragItemNode.current = null;
-  };
-
-  const addNewCard = (listIdx, desc) => {
-    const cardId = Number(Date.now().toString().slice(10));
-
-    const newCard = {
-      id: cardId,
-      desc,
-      labels: [],
-      cover: {
-        color: null,
-        image: null,
-      },
-    };
-
-    const newList = JSON.parse(JSON.stringify(lists));
-    newList[listIdx].cards.splice(newList.length, 0, cardId);
-    console.log(newList, newCard);
-
-    setCards([...cards, newCard]);
-    setLists(newList);
-  };
-
-  const addNewList = (title) => {
-    const newList = {
-      id: Number(Date.now().toString().slice(10)),
-      title,
-      cards: [],
-    };
-
-    const newLists = [...lists, newList];
-    setLists(newLists);
   };
 
   const getDragCard = () => {
@@ -201,7 +129,6 @@ const Board = () => {
         handleDragStart={handleDragStart}
         handleDragEnter={handleDragEnter}
         handleDragEnd={handleDragEnd}
-        addNewCard={addNewCard}
       />
     );
   });
@@ -232,7 +159,7 @@ const Board = () => {
           >
             {listsMarkup}
 
-            <ListAdd addNewList={addNewList} />
+            <ListAdd />
           </div>
         </div>
 

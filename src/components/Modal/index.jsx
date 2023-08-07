@@ -1,106 +1,18 @@
-import { useState } from 'react';
-import { BsCardImage, BsTag, BsTrash, BsXLg } from 'react-icons/bs';
+import { useContext, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { BsCardImage, BsTag, BsTrash, BsXLg } from 'react-icons/bs';
+
+import { CardContext } from '../../context/CardContext';
+import { labels, images } from '../../data';
+
 import LabelsMenu from '../menus/LabelsMenu';
 import CoverMenu from '../menus/CoverMenu';
 import CardTitle from '../titles/CardTitle';
 
-const cardsTemplate = [
-  {
-    id: 0,
-    desc: 'card #0',
-    labels: [3],
-    cover: {
-      color: 3,
-      image: null,
-    },
-  },
-  {
-    id: 1,
-    desc: 'card #1',
-    labels: [2, 4],
-    cover: {
-      color: null,
-      image: null,
-    },
-  },
-  {
-    id: 2,
-    desc: 'card #2',
-    labels: [0, 1, 5],
-    cover: {
-      color: null,
-      image: null,
-    },
-  },
-];
-
-const labels = [
-  {
-    id: 0,
-    colorHex: '#4bce97',
-  },
-  {
-    id: 1,
-    colorHex: '#3498db',
-  },
-  {
-    id: 2,
-    colorHex: '#9b59b6',
-  },
-  {
-    id: 3,
-    colorHex: '#f1c40f',
-  },
-  {
-    id: 4,
-    colorHex: '#e67e22',
-  },
-  {
-    id: 5,
-    colorHex: '#e74c3c',
-  },
-];
-
-const images = [
-  {
-    id: 0,
-    imageUrl:
-      'https://fastly.picsum.photos/id/688/600/400.jpg?hmac=M014VOlusw1Md_8vEx6Tk-GIDuv1VHvgcTTNGGzt4Ac',
-  },
-  {
-    id: 1,
-    imageUrl:
-      'https://fastly.picsum.photos/id/459/600/400.jpg?hmac=n3Krd9fH0v3W0RCYNLw6IcI2A17urizqjxYLlv_Df3c',
-  },
-  {
-    id: 2,
-    imageUrl:
-      'https://fastly.picsum.photos/id/311/600/400.jpg?hmac=cJ_Vez6d3h70x9AOCJJPy9ePkCmIRHJ12yyIWRB6zd0',
-  },
-  {
-    id: 3,
-    imageUrl:
-      'https://fastly.picsum.photos/id/164/600/400.jpg?hmac=AeaV1BoMa0SBprKJm71cmlXO7mUuDsQU5t-n-xUZlus',
-  },
-  {
-    id: 4,
-    imageUrl:
-      'https://fastly.picsum.photos/id/14/600/400.jpg?hmac=v4ezawdoSkP3qaSGMqEfoX7t_-tS_kb1Y8Q66ds-qcE',
-  },
-  {
-    id: 5,
-    imageUrl:
-      'https://fastly.picsum.photos/id/660/600/400.jpg?hmac=-Xa17m6IaMAzxF5w6G72Zyd_tC-0dYMx3WNeCx9WekI',
-  },
-];
-
 const Modal = () => {
-  const [cards, setCards] = useState([...cardsTemplate]);
+  const { cards } = useContext(CardContext);
   const [showLabelsMenu, setShowLabelsMenu] = useState(false);
   const [showCoverMenu, setShowCoverMenu] = useState(false);
-
-  console.log(showLabelsMenu);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -109,53 +21,6 @@ const Modal = () => {
 
   const openLabelsMenu = () => setShowLabelsMenu(true);
   const openCoverMenu = () => setShowCoverMenu(true);
-
-  const handleLabelChange = (e, labelId) => {
-    const newCards = cards.map((curCard) => {
-      if (curCard.id != id) return curCard;
-
-      const isChecked = e.target.checked;
-      const newLabels = curCard.labels.filter(
-        (curLabel) => curLabel !== labelId
-      );
-
-      if (isChecked) {
-        newLabels.push(labelId);
-        newLabels.sort();
-      }
-
-      return { ...curCard, labels: newLabels };
-    });
-    setCards(newCards);
-  };
-
-  const handleCoverChange = (type, coverId) => {
-    const newCards = cards.map((curCard) => {
-      if (curCard.id != id) return curCard;
-
-      let newCover = null;
-
-      if (type === 'color') {
-        newCover = { color: coverId, image: null };
-      } else {
-        newCover = { image: coverId, color: null };
-      }
-
-      return { ...curCard, cover: newCover };
-    });
-
-    setCards(newCards);
-  };
-
-  const handleDescChange = (text) => {
-    const newCards = cards.map((curCard) => {
-      if (curCard.id != id) return curCard;
-
-      return { ...curCard, desc: text };
-    });
-
-    setCards(newCards);
-  };
 
   return (
     <div className='fixed top-0 left-0 w-full h-screen bg-black/40 transition duration-150'>
@@ -197,7 +62,7 @@ const Modal = () => {
 
         <div className='grid grid-cols-3 px-5 py-8'>
           <div className='col-span-3 mb-8 break-words pr-11'>
-            <CardTitle desc={card.desc} onDescChange={handleDescChange} />
+            <CardTitle desc={card.desc} />
           </div>
 
           <div className='col-span-2'>
@@ -246,7 +111,6 @@ const Modal = () => {
                     title='Label'
                     selectedLabels={card.labels}
                     showMenu={setShowLabelsMenu}
-                    onLabelChange={handleLabelChange}
                   />
                 )}
               </div>
@@ -265,7 +129,6 @@ const Modal = () => {
                     title='Cover'
                     cover={card.cover}
                     showMenu={setShowCoverMenu}
-                    onCoverChange={handleCoverChange}
                   />
                 )}
               </div>

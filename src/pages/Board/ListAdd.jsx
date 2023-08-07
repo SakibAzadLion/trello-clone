@@ -1,7 +1,11 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { BsPlusLg, BsXLg } from 'react-icons/bs';
 
-const ListAdd = ({ addNewList }) => {
+import { ListMethodsContext } from '../../context/ListContext';
+
+const ListAdd = () => {
+  const { getLists, createList } = useContext(ListMethodsContext);
+
   const [listTitle, setListTitle] = useState('');
   const [toggleAddList, setToggleAddList] = useState(false);
 
@@ -23,6 +27,18 @@ const ListAdd = ({ addNewList }) => {
         setToggleAddList(false);
       }, 200);
     }
+  };
+
+  const addNewList = (title) => {
+    // const newList = {
+    //   id: Number(Date.now().toString().slice(10)),
+    //   title,
+    //   cards: [],
+    // };
+    // const newLists = [...lists, newList];
+    // setLists(newLists);
+    createList(title);
+    getLists();
   };
 
   const handleAddList = (e) => {
